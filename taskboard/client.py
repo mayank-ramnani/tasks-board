@@ -1,15 +1,10 @@
 from .exceptions import TaskBoardError
-# from .backends import get_backend // use mock for now
-
-def get_backend(name: str):
-    raise NotImplementedError("mocked in tests")
 
 class TaskBoardClient:
-    def __init__(self, backend: str, **config):
-        try:
-            self.backend = get_backend(backend)(**config)
-        except Exception as e:
-            raise TaskBoardError(f"failed to initialize backend '{backend}'") from e
+    def __init__(self, backend):
+        if not backend:
+            raise TaskBoardError("backend must be provided")
+        self.backend = backend
 
     def get_tasks(self, list_id: str):
         return self.backend.get_tasks(list_id)
