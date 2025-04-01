@@ -1,6 +1,7 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import os.path, pickle
+import os.path
+import pickle
 
 SCOPES = ['https://www.googleapis.com/auth/tasks']
 
