@@ -1,4 +1,4 @@
-from .client import TaskBoardClient
-from .exceptions import TaskBoardError
+from .interface import TaskBoard
+from collections.abc import Callable
 
-__all__ = ["TaskBoardClient", "TaskBoardError"]
+get_client: Callable[[], TaskBoard] = lambda: NotImplemented

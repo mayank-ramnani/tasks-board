@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
-class TaskBoardBackend(ABC):
+class TaskBoard(ABC):
     @abstractmethod
     def get_tasks(self, list_id: str) -> List[Dict[str, Any]]:
         """Return list of task dicts for a given list ID."""
