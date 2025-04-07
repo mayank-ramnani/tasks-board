@@ -1,38 +1,54 @@
 import taskboard
-import builtins
+from taskboard.interface import TaskBoard
+from typing import List, Any
+from taskboard.types import Task, TaskList
 
-class DummyClient(taskboard.TaskBoard):
-    def get_tasks(self, list_id: str):
-        return [{"id": f"{i}", "title": f"Task {i}"} for i in range(5)]
+class DummyClient(TaskBoard):
+    def get_tasks(self, list_id: str) -> List[Task]:
+        return [Task(id="1", title="Task 1"), Task(id="2", title="Task 2")]
 
-    def add_task(self, list_id: str, title: str, **kwargs):
-        return "task-new"
+    def add_task(self, list_id: str, title: str, **kwargs: Any) -> str:
+        return "task-123"
 
-    def delete_task(self, task_id: str):
+    def delete_task(self, task_id: str) -> bool:
         return True
 
-    def update_task(self, task_id: str, **kwargs):
-        return {"id": task_id, **kwargs}
+    def update_task(self, task_id: str, **kwargs: Any) -> Task:
+        return Task(id=task_id, **kwargs)
 
-    def list_task_lists(self):
-        return [{"id": "inbox", "name": "Inbox"}]
+    def list_task_lists(self) -> List[TaskList]:
+        return [TaskList(id="inbox", name="Inbox")]
 
-
-def test_main_taskboard(monkeypatch):
+def setup_module() -> None:
     taskboard.get_client = lambda: DummyClient()
 
+def test_get_tasks() -> None:
     client = taskboard.get_client()
-    output = []
+    tasks = client.get_tasks("inbox")
+    assert isinstance(tasks[0], Task)
+    assert tasks[0].title == "Task 1"
 
-    monkeypatch.setattr(builtins, "print", lambda *args, **kwargs: output.append(" ".join(map(str, args))))
+def test_add_task() -> None:
+    client = taskboard.get_client()
+    task_id = client.add_task("inbox", "New Task", priority="high")
+    assert isinstance(task_id, str)
+    assert task_id == "task-123"
 
-    for task in client.get_tasks("inbox"):
-        print(f"[{task['id']}] {task['title']}")
+def test_delete_task() -> None:
+    client = taskboard.get_client()
+    result = client.delete_task("task-123")
+    assert result is True
 
-    assert output == [
-        "[0] Task 0",
-        "[1] Task 1",
-        "[2] Task 2",
-        "[3] Task 3",
-        "[4] Task 4",
-    ]
+def test_update_task() -> None:
+    client = taskboard.get_client()
+    updated = client.update_task("task-123", title="Updated Title")
+    assert isinstance(updated, Task)
+    assert updated.id == "task-123"
+    assert updated.title == "Updated Title"
+
+def test_list_task_lists() -> None:
+    client = taskboard.get_client()
+    lists = client.list_task_lists()
+    assert isinstance(lists[0], TaskList)
+    assert lists[0].id == "inbox"
+    assert lists[0].name == "Inbox"
