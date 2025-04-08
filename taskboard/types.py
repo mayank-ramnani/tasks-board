@@ -9,10 +9,12 @@ class Task:
     Fields:
         id: Unique identifier for the task.
         title: Human-readable title of the task.
+        list_id: Identifier for the list that this task belongs to.
         status: Optional status string (e.g., 'todo', 'in-progress', 'done').
     """
     id: str
     title: str
+    list_id: str
     status: Optional[str] = None
 
 @dataclass
