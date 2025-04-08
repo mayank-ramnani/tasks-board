@@ -27,17 +27,15 @@ class TaskBoard(ABC):
         ...
 
     @abstractmethod
-    def add_task(self, list_id: str, title: str, **kwargs: Any) -> str:
+    def add_task(self, task: Task) -> None:
         """
-        Create a new task in a given task list.
+        Add a new task to the task board. Populate id field.
 
         Args:
-            list_id: The ID of the task list to add the task to.
-            title: The title of the task.
-            kwargs: Additional task metadata (e.g., status, etc).
+            task: A Task object with required creation fields.
 
-        Returns:
-            The ID of the newly created task.
+        Raises:
+            TaskBoardError or a backend-specific exception if creation fails.
         """
         ...
 
@@ -55,16 +53,15 @@ class TaskBoard(ABC):
         ...
 
     @abstractmethod
-    def update_task(self, task_id: str, **kwargs: Any) -> Task:
+    def update_task(self, task: Task) -> None:
         """
-        Update a task's fields by its ID.
+        Update an existing task on the task board.
 
         Args:
-            task_id: The ID of the task to update.
-            kwargs: Fields to update (e.g., title, status).
+            task: A Task object with the ID and updated fields.
 
-        Returns:
-            The updated Task object.
+        Raises:
+            TaskBoardError or a backend-specific exception if the update fails.
         """
 
     @abstractmethod
