@@ -65,7 +65,7 @@ class TaskBoard(ABC):
         """
 
     @abstractmethod
-    def list_task_lists(self) -> List[TaskList]:
+    def get_task_lists(self) -> List[TaskList]:
         """
         Retrieve all available task lists in the backend.
 

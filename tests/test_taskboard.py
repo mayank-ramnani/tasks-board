@@ -5,7 +5,7 @@ from taskboard.types import Task, TaskList
 
 class DummyClient(TaskBoard):
     def get_tasks(self, list_id: str) -> List[Task]:
-        return [Task(id="1", title="Task 1"), Task(id="2", title="Task 2")]
+        return [Task(id="1", title="Task 1", list_id="inbox"), Task(id="2", title="Task 2", list_id="inbox")]
 
     def add_task(self, task: Task) -> None:
         task.id = "task-123"  # simulate assigning ID
@@ -16,7 +16,7 @@ class DummyClient(TaskBoard):
     def update_task(self, task: Task) -> None:
         pass # simulate successful update, no-op
 
-    def list_task_lists(self) -> List[TaskList]:
+    def get_task_lists(self) -> List[TaskList]:
         return [TaskList(id="inbox", name="Inbox")]
 
 def setup_module() -> None:
@@ -30,7 +30,7 @@ def test_get_tasks() -> None:
 
 def test_add_task() -> None:
     client = taskboard.get_client()
-    task = Task(id="", title="New Task")
+    task = Task(id="", title="New Task", list_id="inbox")
     client.add_task(task)
     assert task.id == "task-123"
 
@@ -41,13 +41,13 @@ def test_delete_task() -> None:
 
 def test_update_task() -> None:
     client = taskboard.get_client()
-    task = Task(id="task-123", title="Updated Title")
+    task = Task(id="task-123", title="Updated Title", list_id="inbox")
     client.update_task(task)
     assert task.title == "Updated Title"  # unchanged but confirms no error
 
-def test_list_task_lists() -> None:
+def test_get_task_lists() -> None:
     client = taskboard.get_client()
-    lists = client.list_task_lists()
+    lists = client.get_task_lists()
     assert isinstance(lists[0], TaskList)
     assert lists[0].id == "inbox"
     assert lists[0].name == "Inbox"
