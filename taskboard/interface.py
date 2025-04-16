@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Any
+from typing import List
 from taskboard.types import Task, TaskList
 
 class TaskBoard(ABC):
